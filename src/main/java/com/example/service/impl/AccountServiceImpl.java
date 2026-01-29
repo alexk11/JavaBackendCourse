@@ -33,13 +33,14 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account createAccount(User user) {
-        Account account = Account.builder()
-                .user(user)
-                .moneyAmount(accountProperties.getDefaultAmount())
-                .build();
-        transactionService.executeInTransaction(
-                session -> session.persist(account));
-        return account;
+        return transactionService.executeInTransactionGeneric(() -> {
+            Account newAccount = Account.builder()
+                    .user(user)
+                    .moneyAmount(accountProperties.getDefaultAmount())
+                    .build();
+            sessionFactory.getCurrentSession().persist(newAccount);
+            return newAccount;
+        });
     }
 
     @Override
