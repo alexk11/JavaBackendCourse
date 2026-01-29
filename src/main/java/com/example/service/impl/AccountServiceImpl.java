@@ -53,10 +53,9 @@ public class AccountServiceImpl implements AccountService {
     public List<Account> getUserAccounts(long userId) {
         try (Session session = sessionFactory.openSession()) {
             return session
-                    .createQuery("SELECT a FROM Account a", Account.class)
-                    .list().stream()
-                    .filter(a -> a.getUser().getId() == userId)
-                    .toList();
+                    .createQuery("SELECT a FROM Account a WHERE a.user.id = :userId", Account.class)
+                    .setParameter("userId", userId)
+                    .list();
         }
     }
 
@@ -64,7 +63,7 @@ public class AccountServiceImpl implements AccountService {
     public void depositAccount(long accountId, BigDecimal moneyToDeposit) {
         if (moneyToDeposit.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException(
-                    "Cannot deposit not positive amount: amount=" + moneyToDeposit);
+                    "Cannot deposit not positive amount = " + moneyToDeposit);
         }
         transactionService.executeInTransaction(session -> {
             Account account = session.get(Account.class, accountId);
@@ -89,8 +88,8 @@ public class AccountServiceImpl implements AccountService {
             }
             if (account.getMoneyAmount().compareTo(amountToWithdraw) < 0) {
                 throw new IllegalArgumentException(
-                    "Not enough money to withdraw: id=%s, moneyAmount=%s, attemptedWithdraw=%s"
-                            .formatted(accountId, account.getMoneyAmount(), amountToWithdraw)
+                        "Not enough money to withdraw: id=%s, moneyAmount=%s, attemptedWithdraw=%s"
+                                .formatted(accountId, account.getMoneyAmount(), amountToWithdraw)
                 );
             }
             account.setMoneyAmount(account.getMoneyAmount().subtract(amountToWithdraw));
@@ -112,11 +111,14 @@ public class AccountServiceImpl implements AccountService {
                         "Cannot close the only one user's account");
             }
             Account accountToDeposit = session
-                    .createQuery("SELECT a FROM Account a", Account.class)
+                    .createQuery("SELECT a FROM Account a WHERE a.user.id = :userId " +
+                            "AND a.id <> :accountId", Account.class)
+                    .setParameter("userId", accountToRemove.getUser().getId())
+                    .setParameter("accountId", accountId)
                     .list().stream()
-                    .filter(acc -> acc.getId() != accountId)
                     .findFirst()
                     .orElseThrow();
+
             accountToDeposit.setMoneyAmount(
                     accountToDeposit.getMoneyAmount()
                             .add(accountToRemove.getMoneyAmount()));

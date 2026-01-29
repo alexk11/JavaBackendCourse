@@ -35,26 +35,26 @@ public class TransactionService {
         }
     }
 
-    public<T> T executeInTransaction(Supplier<T> action) {
-        var session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.getTransaction();
-        // если транзакция уже не в статусе NOT_ACTIVE
-        // просто продолжаем выполнение в этой транзакции
-        if (!transaction.getStatus().equals(TransactionStatus.NOT_ACTIVE)) {
-            return action.get();
-        }
-        try {
-            session.beginTransaction();
-            T returnValue = action.get();
-            transaction.commit();
-            return returnValue;
-        } catch (Exception e) {
-            transaction.rollback();
-            throw e;
-        } finally {
-            session.close();
-        }
-    }
+//    public<T> T executeInTransaction(Supplier<T> action) {
+//        var session = sessionFactory.getCurrentSession();
+//        Transaction transaction = session.getTransaction();
+//        // если транзакция уже не в статусе NOT_ACTIVE
+//        // просто продолжаем выполнение в этой транзакции
+//        if (!transaction.getStatus().equals(TransactionStatus.NOT_ACTIVE)) {
+//            return action.get();
+//        }
+//        try {
+//            session.beginTransaction();
+//            T returnValue = action.get();
+//            transaction.commit();
+//            return returnValue;
+//        } catch (Exception e) {
+//            transaction.rollback();
+//            throw e;
+//        } finally {
+//            session.close();
+//        }
+//    }
 
 //    public<T> T executeInTransaction(Function<Session, T> action) {
 //        Transaction transaction = null;

@@ -41,8 +41,7 @@ public class UserServiceImpl implements UserService {
         try (Session session = sessionFactory.openSession()) {
             return session
                     .createQuery("SELECT u FROM User u", User.class)
-                    .list().stream()
-                    .toList();
+                    .list();
         }
     }
 

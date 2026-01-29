@@ -14,7 +14,6 @@
         <jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
         <hibernate-core.version>6.4.4.Final</hibernate-core.version>
         <postgres.version>42.7.3</postgres.version>
-        <jackson-databind.version>2.17.1</jackson-databind.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -36,11 +35,6 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgres.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson-databind.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
