@@ -6,7 +6,7 @@
 	<artifactId>demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>demo</name>
-	<description>Spring Core console app</description>
+	<description>Spring Hibernate console app</description>
 	<properties>
 		<java.version>21</java.version>
         <spring-context.version>6.2.7</spring-context.version>

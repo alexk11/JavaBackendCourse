@@ -18,9 +18,9 @@ public class HibernateConfiguration {
                 .addAnnotatedClass(User.class)
                 .addPackage("com.example")
                 .setProperty("hibernate.connection.driver_class", "org.postgresql.Driver")
-                .setProperty("hibernate.connection.url", "jdbc:postgresql://localhost:5432/payment-db")
-                .setProperty("hibernate.connection.username", "user")
-                .setProperty("hibernate.connection.password", "secret")
+                .setProperty("hibernate.connection.url", "jdbc:postgresql://localhost:5432/postgres")
+                .setProperty("hibernate.connection.username", "postgres")
+                .setProperty("hibernate.connection.password", "postgres")
                 .setProperty("hibernate.show_sql", "true")
                 .setProperty("hibernate.hbm2ddl.auto", "update")
                 .setProperty("hibernate.current_session_context_class", "thread");
