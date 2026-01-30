@@ -8,9 +8,8 @@ public class ConsoleApplication {
 
 	public static void main(String[] args) {
 
-        ApplicationContext context =
+		ApplicationContext context =
                 new AnnotationConfigApplicationContext("com.example");
-		//context.close(); // Надо ли явно вызывать закрытие контекста ??
 	}
 
 }

@@ -5,6 +5,7 @@ import com.example.persistence.entity.User;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 
 public interface AccountService {
@@ -13,15 +14,15 @@ public interface AccountService {
 
     Account createAccount(User user);
 
-    Account getAccountById(long id);
+    Optional<Account> getAccountById(Long id);
 
-    List<Account> getUserAccounts(long userId);
+    List<Account> getUserAccounts(Long userId);
 
-    void depositAccount(long accountId, BigDecimal moneyToDeposit);
+    void depositAccount(Long accountId, BigDecimal moneyToDeposit);
 
-    void withdrawFromAccount(long accountId, BigDecimal amountToWithdraw);
+    void withdrawFromAccount(Long accountId, BigDecimal amountToWithdraw);
 
-    void closeAccount(long accountId);
+    void closeAccount(Long accountId);
 
-    void transfer(long fromAccountId, long toAccountId, BigDecimal amountToTransfer);
+    void transfer(Long fromAccountId, Long toAccountId, BigDecimal amountToTransfer);
 }

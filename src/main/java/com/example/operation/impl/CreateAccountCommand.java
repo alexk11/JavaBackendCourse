@@ -22,16 +22,16 @@ public class CreateAccountCommand implements OperationCommand {
     public void execute() {
         try {
             System.out.println("Enter the user id to create an account for:");
-            int userId = Integer.parseInt(scanner.nextLine());
+            Long userId = Long.parseLong(scanner.nextLine());
             var user = userService.findById(userId);
-            if (user == null) {
+            if (user.isEmpty()) {
                 throw new IllegalArgumentException(
                         "User with id=%s does not exist".formatted(userId));
             }
-            Account account = accountService.createAccount(user);
+            Account account = accountService.createAccount(user.get());
 
             System.out.printf("New account created with id: %s for user: %s%n",
-                    account.getId(), user.getName());
+                    account.getId(), user.get().getName());
 
         } catch (IllegalArgumentException e) {
             System.out.printf("Error occurred: %s", e.getMessage());

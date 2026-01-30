@@ -20,19 +20,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(String name) {
-        User newUser = User.builder()
-                .name(name)
-                .accounts(new ArrayList<>())
-                .build();
-        transactionService.executeInTransaction(
-                session -> session.persist(newUser));
-        return newUser;
+        return transactionService.executeInTransactionGeneric(() -> {
+            var session = sessionFactory.getCurrentSession();
+
+            var existedUser = session.createQuery("FROM User WHERE name = :name", User.class)
+                    .setParameter("name", name)
+                    .getSingleResultOrNull();
+            if (existedUser != null) {
+                throw new IllegalArgumentException("User with the name=%s already exists"
+                        .formatted(name));
+            }
+
+            User user = new User(null, name, new ArrayList<>());
+            session.persist(user);
+
+            return user;
+        });
     }
 
     @Override
-    public User findById(long id) {
+    public Optional<User> findById(Long id) {
         try (Session session = sessionFactory.openSession()) {
-            return session.get(User.class, id);
+            return Optional.of(session.get(User.class, id));
         }
     }
 
