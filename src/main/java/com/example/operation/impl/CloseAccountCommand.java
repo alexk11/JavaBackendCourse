@@ -19,7 +19,7 @@ public class CloseAccountCommand implements OperationCommand {
     public void execute() {
         try {
             System.out.println("Enter account id to close:");
-            int accountId = Integer.parseInt(scanner.nextLine());
+            Long accountId = Long.parseLong(scanner.nextLine());
             accountService.closeAccount(accountId);
             System.out.printf("Account with id=%s successfully closed", accountId);
         } catch (IllegalArgumentException e) {

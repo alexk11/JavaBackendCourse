@@ -21,7 +21,7 @@ public class WithdrawAccountCommand implements OperationCommand {
     public void execute() {
         try {
             System.out.println("Enter account id:");
-            int accountId = Integer.parseInt(scanner.nextLine());
+            Long accountId = Long.parseLong(scanner.nextLine());
             System.out.println("Enter amount to withdraw:");
             BigDecimal amountToWithdraw = BigDecimal.valueOf(Long.parseLong(scanner.nextLine()));
             accountService.withdrawFromAccount(accountId, amountToWithdraw);

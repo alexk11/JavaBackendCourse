@@ -21,7 +21,7 @@ public class DepositAccountCommand implements OperationCommand {
     public void execute() {
         try {
             System.out.println("Enter account id:");
-            int accountId = Integer.parseInt(scanner.nextLine());
+            Long accountId = Long.parseLong(scanner.nextLine());
             System.out.println("Enter amount to deposit:");
             BigDecimal amountToDeposit = BigDecimal.valueOf(Long.parseLong(scanner.nextLine()));
             accountService.depositAccount(accountId, amountToDeposit);

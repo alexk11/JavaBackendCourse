@@ -44,14 +44,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account getAccountById(long id) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.get(Account.class, id);
-        }
+    public Optional<Account> getAccountById(Long id) {
+        var account = sessionFactory.getCurrentSession()
+                .get(Account.class, id);
+        return Optional.of(account);
     }
 
     @Override
-    public List<Account> getUserAccounts(long userId) {
+    public List<Account> getUserAccounts(Long userId) {
         try (Session session = sessionFactory.openSession()) {
             return session
                     .createQuery("SELECT a FROM Account a WHERE a.user.id = :userId", Account.class)
@@ -61,7 +61,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void depositAccount(long accountId, BigDecimal moneyToDeposit) {
+    public void depositAccount(Long accountId, BigDecimal moneyToDeposit) {
         if (moneyToDeposit.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException(
                     "Cannot deposit not positive amount = " + moneyToDeposit);
@@ -77,7 +77,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void withdrawFromAccount(long accountId, BigDecimal amountToWithdraw) {
+    public void withdrawFromAccount(Long accountId, BigDecimal amountToWithdraw) {
         if (amountToWithdraw.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException(
                     "Cannot withdraw not positive amount: amount=" + amountToWithdraw);
@@ -99,7 +99,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void closeAccount(long accountId) {
+    public void closeAccount(Long accountId) {
         transactionService.executeInTransaction(session -> {
             Account accountToRemove = session.get(Account.class, accountId);
             if (accountToRemove == null) {
@@ -114,11 +114,11 @@ public class AccountServiceImpl implements AccountService {
             Account accountToDeposit = session
                     .createQuery("SELECT a FROM Account a WHERE a.user.id = :userId " +
                             "AND a.id <> :accountId", Account.class)
-                    .setParameter("userId", accountToRemove.getUser().getId())
-                    .setParameter("accountId", accountId)
-                    .list().stream()
-                    .findFirst()
-                    .orElseThrow();
+                        .setParameter("userId", accountToRemove.getUser().getId())
+                        .setParameter("accountId", accountId)
+                        .list().stream()
+                        .findFirst()
+                        .orElseThrow();
 
             accountToDeposit.setMoneyAmount(
                     accountToDeposit.getMoneyAmount()
@@ -130,7 +130,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void transfer(long fromAccountId, long toAccountId, BigDecimal amountToTransfer) {
+    public void transfer(Long fromAccountId, Long toAccountId, BigDecimal amountToTransfer) {
         if (amountToTransfer.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException(
                     "Cannot transfer not positive amount: amount = " + amountToTransfer);
