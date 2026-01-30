@@ -50,12 +50,6 @@ public class AccountServiceImpl implements AccountService {
         return Optional.of(account);
     }
 
-    private Optional<Account> getAccountById2(Long id) {
-        var account = sessionFactory.getCurrentSession()
-                .get(Account.class, id);
-        return Optional.of(account);
-    }
-
     @Override
     public List<Account> getUserAccounts(Long userId) {
         try (Session session = sessionFactory.openSession()) {
